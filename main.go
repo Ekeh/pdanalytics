@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"runtime/pprof"
 	"strings"
 	"sync"
@@ -17,6 +18,7 @@ import (
 	"github.com/decred/dcrdata/semver"
 	notify "github.com/decred/dcrdata/v5/notification"
 	"github.com/planetdecred/pdanalytics/attackcost"
+	"github.com/planetdecred/pdanalytics/proposal"
 	"github.com/planetdecred/pdanalytics/stakingreward"
 	"github.com/planetdecred/pdanalytics/web"
 
@@ -173,6 +175,15 @@ func _main(ctx context.Context) error {
 		}
 
 		notifier.RegisterBlockHandlerGroup(rewardCalculator.ConnectBlock)
+	}
+
+	if cfg.EnableProposal == 1 {
+		_, err := proposal.New(dcrdClient, webServer, activeChain, cfg.PoliteiaAPIURL,
+			filepath.Join(cfg.DataDir, cfg.ProposalsFileName))
+		if err != nil {
+			log.Error(err)
+			return fmt.Errorf("Failed to create new proposal component, %s", err.Error())
+		}
 	}
 
 	// (*notify.Notifier).processBlock will discard incoming block if PrevHash does not match

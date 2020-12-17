@@ -13,10 +13,10 @@ import (
 
 	"github.com/asdine/storm/v3"
 	"github.com/asdine/storm/v3/q"
-	"github.com/decred/dcrd/chaincfg"
+	"github.com/decred/dcrd/chaincfg/v2"
 	"github.com/decred/dcrd/rpcclient/v5"
 	"github.com/decred/dcrdata/db/dbtypes/v2"
-	"github.com/decred/dcrdata/explorer/types"
+	"github.com/decred/dcrdata/explorer/types/v2"
 	"github.com/decred/dcrdata/gov/v3/politeia/piclient"
 	pitypes "github.com/decred/dcrdata/gov/v3/politeia/types"
 	"github.com/decred/dcrdata/semver"
@@ -60,10 +60,12 @@ type proposal struct {
 // client and the formatted politeia API URL path to be used. It also checks the
 // db version, Reindexes the db if need be and sets the required db version.
 func New(dcrdClient *rpcclient.Client, webServer *web.Server, params *chaincfg.Params, politeiaURL, dbPath string) (*proposal, error) {
+	UseLogger(log)
 	exp := &proposal{
 		templates:    webServer.Templates,
 		webServer:    webServer,
 		dcrdChainSvr: dcrdClient,
+		ChainParams:  params,
 	}
 
 	if politeiaURL == "" {
@@ -202,8 +204,7 @@ func (db *proposal) Close() error {
 
 func (ac *proposal) Proposal(w http.ResponseWriter, r *http.Request) {
 	ac.reorgLock.Lock()
-	str, err := ac.templates.ExecTemplateToString("proposal", nil)
-	/*str, err := ac.templates.ExecTemplateToString("proposal", struct {
+	str, err := ac.templates.ExecTemplateToString("proposal", struct {
 		*web.CommonPageData
 		HashRate        float64
 		Height          int64
@@ -213,19 +214,21 @@ func (ac *proposal) Proposal(w http.ResponseWriter, r *http.Request) {
 		TicketPoolValue float64
 		CoinSupply      int64
 	}{
-		CommonPageData:  ac.commonData(r),
-		HashRate:        ac.hashrate,
+		CommonPageData: ac.commonData(r),
+		/*HashRate:        ac.hashrate,
 		Height:          ac.height,
 		DCRPrice:        price,
 		TicketPrice:     ac.ticketPrice,
 		TicketPoolSize:  ac.ticketPoolSize,
 		TicketPoolValue: ac.ticketPoolValue,
-		CoinSupply:      ac.coinSupply,
-	})*/
+		CoinSupply:      ac.coinSupply,*/
+	})
 	ac.reorgLock.Unlock()
+	fmt.Println("Proposal template executed")
+
 	if err != nil {
 		log.Errorf("Template execute failure: %v", err)
-		ac.StatusPage(w, r, web.DefaultErrorCode, web.DefaultErrorMessage, "", web.ExpStatusError)
+		ac.StatusPage(w, r, web.DefaultErrorCode, web.DefaultErrorMessage, err.Error(), web.ExpStatusError)
 		return
 	}
 

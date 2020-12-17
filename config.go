@@ -67,7 +67,9 @@ var (
 	defaultTestnetLink  = "https://testnet.dcrdata.org/"
 	defaultOnionAddress = ""
 
-	maxSyncStatusLimit = 5000
+	defaultPoliteiaAPIURl    = "https://proposals.decred.org"
+	defaultProposalsFileName = "proposals.db"
+	maxSyncStatusLimit       = 5000
 )
 
 type config struct {
@@ -92,6 +94,7 @@ type config struct {
 	DisableBlockExplorer          bool `long:"disableblockexplorer" description:"Disables the block explorer and blockchain sync component from running."`
 	EnableAttackCost              int  `long:"attackcost" description:"Enable/Disables the attack cost calculator component from running."`
 	EnableStakingRewardCalculator int  `long:"stakingreward" description:"Enable/Disables the staking reward calculator component from running."`
+	EnableProposal                int  `long:"proposal" description:"Enable/Disables the proposal component from running."`
 
 	// API/server
 	APIProto            string  `long:"apiproto" description:"Protocol for API (http or https)" env:"DCRDATA_ENABLE_HTTPS"`
@@ -160,29 +163,31 @@ type config struct {
 
 var (
 	defaultConfig = config{
-		HomeDir:             defaultHomeDir,
-		DataDir:             defaultDataDir,
-		LogDir:              defaultLogDir,
-		MaxLogZips:          defaultMaxLogZips,
-		ConfigFile:          defaultConfigFile,
-		DebugLevel:          defaultLogLevel,
-		HTTPProfPath:        defaultHTTPProfPath,
-		APIProto:            defaultAPIProto,
-		IndentJSON:          defaultIndentJSON,
-		CacheControlMaxAge:  defaultCacheControlMaxAge,
-		InsightReqRateLimit: defaultInsightReqRateLimit,
-		MaxCSVAddrs:         defaultMaxCSVAddrs,
-		ServerHeader:        defaultServerHeader,
-		DcrdCert:            defaultDaemonRPCCertFile,
-		ExchangeCurrency:    defaultExchangeIndex,
-		DisabledExchanges:   defaultDisabledExchanges,
-		RateCertificate:     defaultRateCertFile,
-		MainnetLink:         defaultMainnetLink,
-		TestnetLink:         defaultTestnetLink,
-		OnionAddress:        defaultOnionAddress,
-
+		HomeDir:                       defaultHomeDir,
+		DataDir:                       defaultDataDir,
+		LogDir:                        defaultLogDir,
+		MaxLogZips:                    defaultMaxLogZips,
+		ConfigFile:                    defaultConfigFile,
+		DebugLevel:                    defaultLogLevel,
+		HTTPProfPath:                  defaultHTTPProfPath,
+		APIProto:                      defaultAPIProto,
+		IndentJSON:                    defaultIndentJSON,
+		CacheControlMaxAge:            defaultCacheControlMaxAge,
+		InsightReqRateLimit:           defaultInsightReqRateLimit,
+		MaxCSVAddrs:                   defaultMaxCSVAddrs,
+		ServerHeader:                  defaultServerHeader,
+		DcrdCert:                      defaultDaemonRPCCertFile,
+		ExchangeCurrency:              defaultExchangeIndex,
+		DisabledExchanges:             defaultDisabledExchanges,
+		RateCertificate:               defaultRateCertFile,
+		MainnetLink:                   defaultMainnetLink,
+		TestnetLink:                   defaultTestnetLink,
+		OnionAddress:                  defaultOnionAddress,
+		ProposalsFileName:             defaultProposalsFileName,
+		PoliteiaAPIURL:                defaultPoliteiaAPIURl,
 		EnableAttackCost:              1,
 		EnableStakingRewardCalculator: 1,
+		EnableProposal:                1,
 	}
 )
 

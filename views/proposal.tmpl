@@ -1,1 +1,30 @@
-<h1>Welcome to proposal module</h1>
+{{define "proposal"}}
+<!DOCTYPE html>
+<html lang="en">
+{{ template "html-head" "Proposal"}}
+{{template "navbar" . }}
+
+   <div
+      class="container py-1 mb-5"
+      data-controller="proposal"
+    >
+    <div class="col-md-24 p-0">
+      <div class="bg-white mb-1 py-2 px-3 my-0">
+        <div class="d-inline-block position-relative p-2">
+          <span class="card-icon dcricon-two blocks h1 mr-2"></span>
+        {#   <span class="h4 my-3">Proposal</span> #}
+          <h1>Welcome to proposal module</h1>
+        </div>
+
+      </div>
+
+      </div>
+      </div>
+     
+    </div>
+    </div>
+  </div>
+ {{ template "footer" . }}
+</body>
+</html>
+{{end}}
